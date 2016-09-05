@@ -1,0 +1,27 @@
+---
+- hosts: LAMP
+  remote_user: root
+  tasks:
+  - name: Install all program
+    apt: name={{ item }} state=present
+    with_items:
+     - mysql-server
+     - php5-mysql
+     - apache2
+     - php5
+     - libapache2-mod-php5 
+     - php5-mcrypt 
+     
+
+
+  - name: Start apache and sql if it stopped 
+    service: name={{ item }} state=started
+    with_items:
+     - apache2
+     - mysql
+
+#  - name: download wordpress
+#    get_url: url=https://wordpress.org/latest.tar.gz dest=/var/www/wp.gz  
+  
+  - name: Download and unpack wordpress
+    unarchive: src=https://wordpress.org/latest.tar.gz dest=/var/www remote_src=yes
