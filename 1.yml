@@ -22,19 +22,21 @@
 
   - name: download wordpress
     get_url: url=https://wordpress.org/latest.tar.gz dest=/var/www/wp.gz  
-  - name: unzip
-    command: chdir=/var/www /bin/cp -r wordpress/. /var/www/html/
   
   - name: unzip
     command: chdir=/var/www /bin/tar xvf wp.gz  
-  
+  - name: Clear html folder
+    command: chdir=/var/www/html /bin/rm index.html 
+  - name: copy unzipped wordpress
+    command: chdir=/var/www /bin/cp -r wordpress/. /var/www/html/
+    
   - name: Create WordPress database
     mysql_db: name=wordpress state=present
   
-  - mysql_user: name=bob password=12345 priv=*.*:ALL state=present
-#  - name: Create WordPress database user
-#    mysql_user: name=wordpressuser password=password host='localhost' state=present
+#  - mysql_user: name=bob password=12345 priv=*.*:ALL state=present
+  - name: Create WordPress database user
+    mysql_user: name=wordpressuser password=password priv=*.*:ALL host='localhost' state=present
   - name: test
-    copy: src=vp-config.php dest=/var/www/html/
+    copy: src=wp-config.php dest=/var/www/html/
  
   
