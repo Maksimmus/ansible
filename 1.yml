@@ -11,7 +11,7 @@
      - php5
      - libapache2-mod-php5 
      - php5-mcrypt 
-     
+     - python-mysqldb
 
 
   - name: Start apache and sql if it stopped 
@@ -20,8 +20,20 @@
      - apache2
      - mysql
 
-#  - name: download wordpress
-#    get_url: url=https://wordpress.org/latest.tar.gz dest=/var/www/wp.gz  
+  - name: download wordpress
+    get_url: url=https://wordpress.org/latest.tar.gz dest=/var/www/wp.gz  
+  - name: unzip
+    command: chdir=/var/www /bin/cp -r wordpress/. /var/www/html/
   
-  - name: Download and unpack wordpress
-    unarchive: src=https://wordpress.org/latest.tar.gz dest=/var/www remote_src=yes
+  - name: unzip
+    command: chdir=/var/www /bin/tar xvf wp.gz  
+  
+  - name: Create WordPress database
+    mysql_db: name=wordpress state=present
+
+  - name: Create WordPress database user
+    mysql_user: name=wordpressuser password=password host='localhost' state=present
+  - name: test
+    copy: src=vp-config.php dest=/var/www/html/
+ 
+  
