@@ -1,5 +1,5 @@
 ---
-- hosts: 46.101.119.141
+- hosts: all
   remote_user: root
   tasks:
   - name: Install all program
